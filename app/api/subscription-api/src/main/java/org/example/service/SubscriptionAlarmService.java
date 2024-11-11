@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.SubscriptionMessage;
 import org.example.dto.response.ArtistSubscriptionDomainResponse;
 import org.example.dto.response.GenreSubscriptionDomainResponse;
+import org.example.entity.ShowAlarm;
 import org.example.message.MessageParam;
 import org.example.message.PushMessageTemplate;
 import org.example.service.dto.ArtistSubscriptionMessageServiceRequest;
@@ -15,7 +16,9 @@ import org.example.service.dto.MultipleTargetMessageServiceRequest;
 import org.example.service.dto.SubscriptionMessageServiceRequest;
 import org.example.usecase.ArtistSubscriptionUseCase;
 import org.example.usecase.GenreSubscriptionUseCase;
+import org.example.usecase.ShowAlarmUseCase;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +26,8 @@ public class SubscriptionAlarmService {
 
     private final ArtistSubscriptionUseCase artistSubscriptionUseCase;
     private final GenreSubscriptionUseCase genreSubscriptionUseCase;
+    private final ShowAlarmUseCase showAlarmUseCase;
     private final SubscriptionMessage subscriptionMessage;
-
 
     public void showRelationSubscription(SubscriptionMessageServiceRequest request) {
         var artistSubscriptions = artistSubscriptionUseCase.findArtistSubscriptionsByArtistIds(request.artistIds());
@@ -42,6 +45,7 @@ public class SubscriptionAlarmService {
             MessageParam message = PushMessageTemplate.getSubscribedArtistVisitKoreaAlertMessage(artistName);
 
             subscriptionMessage.send(MultipleTargetMessageServiceRequest.of(fcmTokens, message));
+            saveShowAlarm(fcmTokens, message);
         }
 
         var genreSubscriptions = genreSubscriptionUseCase.findGenreSubscriptionsByGenreIds(request.genreIds());
@@ -59,7 +63,21 @@ public class SubscriptionAlarmService {
             MessageParam message = PushMessageTemplate.getSubscribedGenreVisitKoreaAlertMessage(genreName);
 
             subscriptionMessage.send(MultipleTargetMessageServiceRequest.of(fcmTokens, message));
+            saveShowAlarm(fcmTokens, message);
         }
+    }
+
+    @Transactional
+    public void saveShowAlarm(List<String> fcmTokens, MessageParam message) {
+        fcmTokens.stream()
+            .map(userFcmToken -> ShowAlarm.builder()
+                .userFcmToken(userFcmToken)
+                .title(message.title())
+                .content(message.body())
+                .checked(false)
+                .build()
+            )
+            .forEach(showAlarmUseCase::save);
     }
 
     public void artistSubscribe(ArtistSubscriptionMessageServiceRequest request) {

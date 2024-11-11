@@ -7,10 +7,12 @@ include (":app:api")
 include (":app:api:subscription-api")
 include (":app:api:ticketing-api")
 include (":app:api:common-api")
+include (":app:api:alarm-api")
 
 include (":app:domain")
 include (":app:domain:subscription-domain")
 include (":app:domain:ticketing-domain")
+include (":app:domain:alarm-domain")
 include (":app:domain:common-domain")
 
 include (":app:infrastructure")
