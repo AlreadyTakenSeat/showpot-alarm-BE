@@ -30,6 +30,7 @@ public class ShowAlarmQuerydslRepositoryImpl implements ShowAlarmQuerydslReposit
                 Projections.constructor(
                     ShowAlarmDomainResponse.class,
                     showAlarm.id,
+                    showAlarm.showId,
                     showAlarm.title,
                     showAlarm.content,
                     showAlarm.createdAt,

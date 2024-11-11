@@ -2,6 +2,7 @@ package org.example.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.example.SubscriptionMessage;
@@ -45,7 +46,7 @@ public class SubscriptionAlarmService {
             MessageParam message = PushMessageTemplate.getSubscribedArtistVisitKoreaAlertMessage(artistName);
 
             subscriptionMessage.send(MultipleTargetMessageServiceRequest.of(fcmTokens, message));
-            saveShowAlarm(fcmTokens, message);
+            saveShowAlarm(request.showId(), fcmTokens, message);
         }
 
         var genreSubscriptions = genreSubscriptionUseCase.findGenreSubscriptionsByGenreIds(request.genreIds());
@@ -63,14 +64,15 @@ public class SubscriptionAlarmService {
             MessageParam message = PushMessageTemplate.getSubscribedGenreVisitKoreaAlertMessage(genreName);
 
             subscriptionMessage.send(MultipleTargetMessageServiceRequest.of(fcmTokens, message));
-            saveShowAlarm(fcmTokens, message);
+            saveShowAlarm(request.showId(), fcmTokens, message);
         }
     }
 
     @Transactional
-    public void saveShowAlarm(List<String> fcmTokens, MessageParam message) {
+    public void saveShowAlarm(UUID showId, List<String> fcmTokens, MessageParam message) {
         fcmTokens.stream()
             .map(userFcmToken -> ShowAlarm.builder()
+                .showId(showId)
                 .userFcmToken(userFcmToken)
                 .title(message.title())
                 .content(message.body())
