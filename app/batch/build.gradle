@@ -12,4 +12,8 @@ allprojects {
 dependencies {
     implementation project(":app:api:ticketing-api")
     implementation project(":app:domain:ticketing-domain")
+    implementation project(":app:domain:alarm-domain")
+    implementation project(":app:domain:common-domain")
+
+    implementation 'org.springframework.data:spring-data-commons:3.3.0'
 }

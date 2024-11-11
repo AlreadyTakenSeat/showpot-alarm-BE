@@ -2,9 +2,12 @@ package org.example.job;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.entity.ShowAlarm;
+import org.example.message.MessageParam;
 import org.example.message.PushMessageTemplate;
 import org.example.service.BatchMessage;
 import org.example.service.dto.request.SingleTargetMessageBatchRequest;
+import org.example.usecase.ShowAlarmUseCase;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class TicketingAlertQuartzJob implements Job {
 
     private final BatchMessage batchMessage;
+    private final ShowAlarmUseCase showAlarmUseCase;
 
     @Override
     public void execute(JobExecutionContext context) {
@@ -33,11 +37,20 @@ public class TicketingAlertQuartzJob implements Job {
         String name = context.getMergedJobDataMap().getString("name");
         String time = context.getTrigger().getKey().getGroup();
 
+        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBeforeHours(name, time);
         batchMessage.send(
             SingleTargetMessageBatchRequest.from(
                 userFcmToken,
-                PushMessageTemplate.getTicketingAlertMessageBeforeHours(name, time)
+                message
             )
+        );
+
+        showAlarmUseCase.save(ShowAlarm.builder()
+            .userFcmToken(userFcmToken)
+            .title(message.title())
+            .content(message.body())
+            .checked(false)
+            .build()
         );
     }
 

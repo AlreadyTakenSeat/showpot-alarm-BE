@@ -1,5 +1,6 @@
 dependencies {
     implementation project(":app:domain:subscription-domain")
+    implementation project(":app:domain:alarm-domain")
     implementation project(":app:api:common-api")
 
     //redis sub

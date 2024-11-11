@@ -16,4 +16,5 @@ dependencies {
     // for config registry
     implementation project(":app:api:subscription-api")
     implementation project(":app:api:ticketing-api")
+    implementation project(":app:api:alarm-api")
 }
