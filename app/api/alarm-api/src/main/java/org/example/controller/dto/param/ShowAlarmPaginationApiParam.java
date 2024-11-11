@@ -8,6 +8,7 @@ import org.example.service.dto.param.ShowAlarmPaginationServiceParam;
 @Builder
 public record ShowAlarmPaginationApiParam(
     UUID id,
+    UUID showId,
     String title,
     String content,
     LocalDateTime createAt
@@ -16,6 +17,7 @@ public record ShowAlarmPaginationApiParam(
     public static ShowAlarmPaginationApiParam from(ShowAlarmPaginationServiceParam param) {
         return ShowAlarmPaginationApiParam.builder()
             .id(param.id())
+            .showId(param.showId())
             .title(param.title())
             .content(param.content())
             .createAt(param.createAt())

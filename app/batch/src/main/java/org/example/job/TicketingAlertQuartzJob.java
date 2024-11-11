@@ -1,5 +1,6 @@
 package org.example.job;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.entity.ShowAlarm;
@@ -35,6 +36,7 @@ public class TicketingAlertQuartzJob implements Job {
     private void performJobTask(JobExecutionContext context) throws JobExecutionException {
         String userFcmToken = context.getMergedJobDataMap().getString("userFcmToken");
         String name = context.getMergedJobDataMap().getString("name");
+        UUID showId = UUID.fromString(context.getMergedJobDataMap().getString("showId"));
         String time = context.getTrigger().getKey().getGroup();
 
         MessageParam message = PushMessageTemplate.getTicketingAlertMessageBeforeHours(name, time);
@@ -47,6 +49,7 @@ public class TicketingAlertQuartzJob implements Job {
 
         showAlarmUseCase.save(ShowAlarm.builder()
             .userFcmToken(userFcmToken)
+            .showId(showId)
             .title(message.title())
             .content(message.body())
             .checked(false)

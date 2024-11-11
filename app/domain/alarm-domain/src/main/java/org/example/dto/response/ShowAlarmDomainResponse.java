@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public record ShowAlarmDomainResponse(
     UUID id,
+    UUID showId,
     String title,
     String content,
     LocalDateTime createAt,

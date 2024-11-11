@@ -8,6 +8,7 @@ import org.example.dto.response.ShowAlarmDomainResponse;
 @Builder
 public record ShowAlarmPaginationServiceParam(
     UUID id,
+    UUID showId,
     String title,
     String content,
     LocalDateTime createAt
@@ -16,6 +17,7 @@ public record ShowAlarmPaginationServiceParam(
     public static ShowAlarmPaginationServiceParam from(ShowAlarmDomainResponse response) {
         return ShowAlarmPaginationServiceParam.builder()
             .id(response.id())
+            .showId(response.showId())
             .title(response.title())
             .content(response.content())
             .createAt(response.createAt())

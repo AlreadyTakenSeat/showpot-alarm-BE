@@ -9,61 +9,33 @@ import org.example.listener.dto.ShowRelationSubscriptionMessageApiRequest;
 import org.springframework.data.redis.connection.Message;
 
 @Slf4j
-public class SubscriptionMessageConverter {
+public final class SubscriptionMessageConverter {
+
+    private SubscriptionMessageConverter() {
+    }
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static ShowRelationSubscriptionMessageApiRequest toShowRelationSubscriptionMessage(Message message) {
-        try {
-            var convertedMessage = objectMapper.readValue(
-                message.getBody(),
-                ShowRelationSubscriptionMessageApiRequest.class
-            );
-            log.info("Message published successfully to topic: {}",
-                new String(message.getChannel()));
-            log.info(
-                "Subscribe Message Contents ( ShowRelationSubscriptionMessageApiRequest : {} )",
-                message);
-
-            return convertedMessage;
-        } catch (IOException e) {
-            log.error("Failed to convert message to ShowRelationSubscriptionMessageApiRequest", e);
-            throw new IllegalArgumentException("메시지를 받지 못했습니다.");
-        }
+        return convertMessage(message, ShowRelationSubscriptionMessageApiRequest.class);
     }
 
     public static ArtistSubscriptionMessageApiRequest toArtistSubscriptionMessage(Message message) {
-        try {
-            var convertedMessage = objectMapper.readValue(
-                message.getBody(),
-                ArtistSubscriptionMessageApiRequest.class
-            );
-            log.info("Message published successfully to topic: {}",
-                new String(message.getChannel()));
-            log.info("Subscribe Message Contents ( ArtistSubscriptionMessageApiRequest : {} )",
-                message);
-
-            return convertedMessage;
-        } catch (IOException e) {
-            log.error("Failed to convert message to ArtistSubscriptionMessageApiRequest", e);
-            throw new IllegalArgumentException("메시지를 받지 못했습니다.");
-        }
+        return convertMessage(message, ArtistSubscriptionMessageApiRequest.class);
     }
 
     public static GenreSubscriptionMessageApiRequest toGenreSubscriptionMessage(Message message) {
-        try {
-            var convertedMessage = objectMapper.readValue(
-                message.getBody(),
-                GenreSubscriptionMessageApiRequest.class
-            );
-            log.info("Message published successfully to topic: {}",
-                new String(message.getChannel()));
-            log.info("Subscribe Message Contents ( GenreSubscriptionMessageServiceRequest : {} )",
-                message);
+        return convertMessage(message, GenreSubscriptionMessageApiRequest.class);
+    }
 
+    private static <T> T convertMessage(Message message, Class<T> targetType) {
+        try {
+            T convertedMessage = objectMapper.readValue(message.getBody(), targetType);
+            log.info("Message published successfully to topic: {}", new String(message.getChannel()));
+            log.info("Subscribe Message Contents ( {} : {} )", targetType.getName(), message);
             return convertedMessage;
         } catch (IOException e) {
-            log.error("Failed to convert message to GenreSubscriptionMessageServiceRequest", e);
+            log.error("Failed to convert message to {}", targetType.getName(), e);
             throw new IllegalArgumentException("메시지를 받지 못했습니다.");
         }
     }

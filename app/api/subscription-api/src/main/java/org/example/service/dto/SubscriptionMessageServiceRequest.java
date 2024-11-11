@@ -6,6 +6,7 @@ import lombok.Builder;
 
 @Builder
 public record SubscriptionMessageServiceRequest(
+    UUID showId,
     List<UUID> artistIds,
     List<UUID> genreIds
 ) {

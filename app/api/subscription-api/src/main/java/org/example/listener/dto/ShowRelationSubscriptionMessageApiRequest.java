@@ -7,12 +7,14 @@ import org.example.service.dto.SubscriptionMessageServiceRequest;
 
 @Builder
 public record ShowRelationSubscriptionMessageApiRequest(
+    UUID showId,
     List<UUID> artistIds,
     List<UUID> genreIds
 ) {
 
     public SubscriptionMessageServiceRequest toServiceRequest() {
         return SubscriptionMessageServiceRequest.builder()
+            .showId(showId)
             .artistIds(artistIds)
             .genreIds(genreIds)
             .build();
