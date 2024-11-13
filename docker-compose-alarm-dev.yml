@@ -1,7 +1,7 @@
 services:
-  app:
+  yapp-alarm-server:
     image: yapp_alarm
-    container_name: yapp_alarm_server
+    container_name: yapp-alarm-server
     build:
       context: .
       dockerfile: dockerfile-alarm-dev
