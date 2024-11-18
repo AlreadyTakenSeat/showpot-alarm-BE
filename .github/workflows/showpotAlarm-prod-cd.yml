@@ -100,7 +100,7 @@ jobs:
             docker image prune -f -a
             docker volume prune -f -a
             docker pull ${{ env.IMAGE_URI }}
-            docker run -d --name alarm -p 8080:8080 -e ENVIRONMENT=prod --network prod-network ${{ env.IMAGE_URI }}
+            docker run -d --name alarm -p 8081:8081 -e ENVIRONMENT=prod --network prod-network ${{ env.IMAGE_URI }}
 
       - name: Remove Github Actions IP from Security Group
         if: always()
