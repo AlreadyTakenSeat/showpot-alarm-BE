@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - prod
-      - feat/prod-cicd
 
 env:
   ECR_REPOSITORY: showpot-alarm
