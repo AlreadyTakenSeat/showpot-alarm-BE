@@ -94,13 +94,13 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_PROD_SSH_PRIVATE_KEY }}
           script: |
-            docker ps -q --filter "name=core" | xargs -r docker stop
-            docker ps -aq --filter "name=core" | xargs -r docker rm
+            docker ps -q --filter "name=alarm" | xargs -r docker stop
+            docker ps -aq --filter "name=alarm" | xargs -r docker rm
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
             docker image prune -f -a
             docker volume prune -f -a
             docker pull ${{ env.IMAGE_URI }}
-            docker run -d --name core -p 8080:8080 -e ENVIRONMENT=prod --network prod-network ${{ env.IMAGE_URI }}
+            docker run -d --name alarm -p 8080:8080 -e ENVIRONMENT=prod --network prod-network ${{ env.IMAGE_URI }}
 
       - name: Remove Github Actions IP from Security Group
         if: always()
