@@ -6,8 +6,7 @@ on:
       - prod
 
 env:
-  AWS_REGION: ap-northeast-2
-  ECR_REPOSITORY: showpot-alarm-application
+  ECR_REPOSITORY: showpot-alarm
 
 jobs:
   build-and-deploy:
@@ -34,9 +33,9 @@ jobs:
             ./app/domain/common-domain/src/main/resources/application-domain-prod.yml,
             ./app/infrastructure/fcm/src/main/resources/application-fcm-prod.yml
         env:
-          spring.datasource.url: ${{ secrets.APPLICATION_DATASOURCE_URL_DEV }}
-          spring.datasource.username: ${{ secrets.APPLICATION_DATASOURCE_USERNAME }}
-          spring.datasource.password: ${{ secrets.APPLICATION_DATASOURCE_PASSWORD }}
+          spring.datasource.url: ${{ secrets.APPLICATION_DATASOURCE_URL_PROD }}
+          spring.datasource.username: ${{ secrets.APPLICATION_DATASOURCE_USERNAME_PROD }}
+          spring.datasource.password: ${{ secrets.APPLICATION_DATASOURCE_PASSWORD_PROD }}
           cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
           cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_KEY }}
           fcm.project_id: ${{ secrets.FCM_PROJECT_ID }}
@@ -50,18 +49,12 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew clean build -Dspring.profiles.active=prod
 
-      - name: Prepare File for Deployment
-        run: |
-          mkdir -p deployment-alarm/app/build/libs
-          cp dockerfile-alarm-dev docker-compose-alarm-dev.yml deployment-alarm/
-          cp -r ./app/build/libs deployment-alarm/app/build
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ap-northeast-2
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Set image tag
         id: set-tag
@@ -85,21 +78,51 @@ jobs:
           IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
-      - name: Update ECS task definition
-        id: update-task
-        run: |
-          TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition showpot-alarm --region $AWS_REGION)
-          NEW_TASK_DEFINITION=$(echo $TASK_DEFINITION | jq --arg IMAGE_URI "$IMAGE_URI" '
-            .taskDefinition | 
-            .containerDefinitions[0].image=$IMAGE_URI | 
-            del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)')
-          echo $NEW_TASK_DEFINITION > new-task-def.json
-          REGISTERED_TASK_DEFINITION=$(aws ecs register-task-definition --cli-input-json file://new-task-def.json)
-          TASK_REVISION=$(echo $REGISTERED_TASK_DEFINITION | jq -r '.taskDefinition.taskDefinitionArn')
+      - name: Get Github Actions IP
+        id: ip
+        uses: candidob/get-runner-ip@v1.0.0
 
-          echo "Registered new task definition revision: $TASK_REVISION"
-          echo "TASK_REVISION=$TASK_REVISION" >> $GITHUB_ENV
-
-      - name: Deploy to ECS service
+      - name: Add Github Actions IP on Security Group
         run: |
-          aws ecs update-service --cluster showpot-cluster --service showpot-alarm-service --task-definition $TASK_REVISION --force-new-deployment --region $AWS_REGION
+          aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_PROD_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      - name: Connect ec2 and Run Docker Container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_PROD_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_PROD_SSH_PRIVATE_KEY }}
+          script: |
+            docker ps -q --filter "name=alarm" | xargs -r docker stop
+            docker ps -aq --filter "name=alarm" | xargs -r docker rm
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+            docker image prune -f -a
+            docker volume prune -f -a
+            docker pull ${{ env.IMAGE_URI }}
+            docker run -d --name alarm -p 8081:8081 -e ENVIRONMENT=prod --network prod-network ${{ env.IMAGE_URI }}
+
+      - name: Remove Github Actions IP from Security Group
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_PROD_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      - name: Backend CD for Dev Server Discord Notification
+        uses: sarisia/actions-status-discord@v1
+        if: success()
+        with:
+          title: ✅ showpot-alarm-BE 운용 서버 배포 프로세스가 완료되었습니다! ✅
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          content: "<@1084774841460215839> <@749533823057920030> 배포가 정상적으로 이뤄졌는지 확인해주세요!"
+          color: 00FF00
+          username: showPot-Bot
+          avatar_url: ${{ secrets.DISCORD_NOTIFICATION_SUCCESS_AVATAR_URL }}
+
+      - name: Backend CD for Dev Server Discord Notification
+        uses: sarisia/actions-status-discord@v1
+        if: failure()
+        with:
+          title: ❗️showpot-alarm-BE 운용 서버 배포 프로세스가 실패했습니다! ❗️
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          color: FF0000
+          username: showPot-Bot
+          avatar_url: ${{ secrets.DISCORD_NOTIFICATION_FAILED_AVATAR_URL }}
