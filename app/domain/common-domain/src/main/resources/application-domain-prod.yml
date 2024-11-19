@@ -5,6 +5,6 @@ spring:
     show-sql: true
   datasource:
     url: ${APPLICATION_DATASOURCE_URL_PROD}
-    username: ${APPLICATION_DATASOURCE_USERNAME}
-    password: ${APPLICATION_DATASOURCE_PASSWORD}
+    username: ${APPLICATION_DATASOURCE_USERNAME_PROD}
+    password: ${APPLICATION_DATASOURCE_PASSWORD_PROD}
     driver-class-name: org.postgresql.Driver
