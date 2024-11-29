@@ -21,7 +21,7 @@ public record TicketingReservationMessageApiRequest(
             .showId(showId)
             .ticketingAt(LocalDateTime.parse(ticketingAt))
             .addAlertAts(addAlertAts.stream().map(LocalDateTime::parse).toList())
-            .addAlertAts(deleteAlertAts.stream().map(LocalDateTime::parse).toList())
+            .deleteAlertAts(deleteAlertAts.stream().map(LocalDateTime::parse).toList())
             .build();
     }
 }
