@@ -2,8 +2,6 @@ package org.example.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.vo.TicketingAlertTime;
 
 @Entity
 @Getter
@@ -25,28 +22,27 @@ public class TicketingAlert extends BaseEntity {
     @Column(name = "schedule_alert_time", nullable = false)
     private LocalDateTime alertTime;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "ticketing_alert_time", nullable = false)
-    private TicketingAlertTime ticketingAlertTime;
-
     @Column(name = "user_fcm_token", nullable = false)
     private String userFcmToken;
 
     @Column(name = "show_id", nullable = false)
     private UUID showId;
 
+    @Column(name = "ticketing_time", nullable = false)
+    private LocalDateTime ticketingTime;
+
     @Builder
     private TicketingAlert(
         String name,
         LocalDateTime alertTime,
-        TicketingAlertTime ticketingAlertTime,
         String userFcmToken,
-        UUID showId
+        UUID showId,
+        LocalDateTime ticketingTime
     ) {
         this.name = name;
         this.alertTime = alertTime;
-        this.ticketingAlertTime = ticketingAlertTime;
         this.userFcmToken = userFcmToken;
         this.showId = showId;
+        this.ticketingTime = ticketingTime;
     }
 }

@@ -45,7 +45,7 @@ public class FCMClientTest {
     @Disabled
     @Test
     public void sendSingleUser() throws FirebaseMessagingException {
-        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBefore24Hours("공연제목", "24");
+        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBefore30Minutes("공연제목", "24");
         FCMMessageParam fcmMessage = FCMMessageParam.from(message);
 
         fcmClient.sendNotification(
@@ -60,7 +60,7 @@ public class FCMClientTest {
     @Disabled
     @Test
     public void sendFailureSingleUser() throws FirebaseMessagingException {
-        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBefore24Hours("공연제목", "24");
+        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBefore30Minutes("공연제목", "24");
         FCMMessageParam fcmMessage = FCMMessageParam.from(message);
 
         fcmClient.sendNotification(
@@ -72,7 +72,7 @@ public class FCMClientTest {
     @Disabled
     @Test
     public void sendMultiUser() throws FirebaseMessagingException {
-        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBefore24Hours("공연제목", "24");
+        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBefore30Minutes("공연제목", "24");
         FCMMessageParam fcmMessage = FCMMessageParam.from(message);
         List<String> fcmTokens = List.of(
             "cB9rtWzKVkBWglacCkCvF4:"
@@ -90,7 +90,7 @@ public class FCMClientTest {
     @Disabled
     @Test
     public void allFail() {
-        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBefore24Hours("공연제목", "24");
+        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBefore30Minutes("공연제목", "24");
         FCMMessageParam fcmMessage = FCMMessageParam.from(message);
         List<String> fcmTokens = List.of(
             "cB9rtWzKVkBWglacCkCvF4:abc",
@@ -103,7 +103,7 @@ public class FCMClientTest {
     @Disabled
     @Test
     public void failAndSuccess() {
-        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBefore24Hours("공연제목", "24");
+        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBefore30Minutes("공연제목", "24");
         FCMMessageParam fcmMessage = FCMMessageParam.from(message);
         List<String> fcmTokens = List.of(
             "cB9rtWzKVkBWglacCkCvF4:abc",
@@ -117,9 +117,9 @@ public class FCMClientTest {
 
     private static Stream<Arguments> getMessage() {
         return Stream.of(
-            Arguments.of(PushMessageTemplate.getTicketingAlertMessageBefore24Hours("공연제목", "24")),
-            Arguments.of(PushMessageTemplate.getTicketingAlertMessageBefore6Hours("공연제목", "6")),
-            Arguments.of(PushMessageTemplate.getTicketingAlertMessageBefore1Hours("공연제목", "1")),
+            Arguments.of(PushMessageTemplate.getTicketingAlertMessageBefore30Minutes("공연제목", "24")),
+            Arguments.of(PushMessageTemplate.getTicketingAlertMessageBefore10Minutes("공연제목", "6")),
+            Arguments.of(PushMessageTemplate.getTicketingAlertMessageBefore5Minutes("공연제목", "1")),
             Arguments.of(PushMessageTemplate.getSubscribedArtistVisitKoreaAlertMessage("아티스트이름")),
             Arguments.of(PushMessageTemplate.getSubscribedGenreVisitKoreaAlertMessage("장르이름"))
         );

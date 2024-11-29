@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.batch.TicketingAlertBatch;
 import org.example.dto.response.TicketingAlertToSchedulerDomainResponse;
 import org.example.service.dto.request.TicketingReservationMessageServiceRequest;
-import org.example.service.dto.response.TicketingAlertServiceResponse;
+import org.example.service.dto.response.TicketingAlertServiceRequest;
 import org.example.usecase.TicketingAlertUseCase;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class TicketingAlertService {
             .reserveTicketingAlert(request.toDomainRequest());
 
         ticketingAlertBatchComponent.reserveTicketingAlerts(
-            TicketingAlertServiceResponse.from(ticketingAlertToScheduler)
+            TicketingAlertServiceRequest.from(ticketingAlertToScheduler)
         );
     }
 }
