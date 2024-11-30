@@ -12,8 +12,8 @@ public record FCMMessageParam(
 
     public static FCMMessageParam from(MessageParam param) {
         return FCMMessageParam.builder()
-            .title(param.title())
-            .body(param.body())
+            .title(param.getTitle())
+            .body(param.getBody())
             .build();
     }
 

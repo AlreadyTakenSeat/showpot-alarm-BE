@@ -10,7 +10,7 @@ import org.example.dto.response.ArtistSubscriptionDomainResponse;
 import org.example.dto.response.GenreSubscriptionDomainResponse;
 import org.example.entity.ShowAlarm;
 import org.example.message.MessageParam;
-import org.example.message.PushMessageTemplate;
+import org.example.message.SubscribedMessageTemplate;
 import org.example.service.dto.ArtistSubscriptionMessageServiceRequest;
 import org.example.service.dto.GenreSubscriptionMessageServiceRequest;
 import org.example.service.dto.MultipleTargetMessageServiceRequest;
@@ -43,7 +43,7 @@ public class SubscriptionAlarmService {
         for (Map.Entry<String, List<String>> entry : artistSubscriptionsMap.entrySet()) {
             String artistName = entry.getKey();
             List<String> fcmTokens = entry.getValue();
-            MessageParam message = PushMessageTemplate.getSubscribedArtistVisitKoreaAlertMessage(artistName);
+            MessageParam message = SubscribedMessageTemplate.getSubscribedArtistVisitKoreaAlertMessage(artistName);
 
             subscriptionMessage.send(MultipleTargetMessageServiceRequest.of(fcmTokens, message));
             saveShowAlarm(request.showId(), fcmTokens, message);
@@ -61,7 +61,7 @@ public class SubscriptionAlarmService {
         for (Map.Entry<String, List<String>> entry : genreSubscriptionsMap.entrySet()) {
             String genreName = entry.getKey();
             List<String> fcmTokens = entry.getValue();
-            MessageParam message = PushMessageTemplate.getSubscribedGenreVisitKoreaAlertMessage(genreName);
+            MessageParam message = SubscribedMessageTemplate.getSubscribedGenreVisitKoreaAlertMessage(genreName);
 
             subscriptionMessage.send(MultipleTargetMessageServiceRequest.of(fcmTokens, message));
             saveShowAlarm(request.showId(), fcmTokens, message);
@@ -74,8 +74,8 @@ public class SubscriptionAlarmService {
             .map(userFcmToken -> ShowAlarm.builder()
                 .showId(showId)
                 .userFcmToken(userFcmToken)
-                .title(message.title())
-                .content(message.body())
+                .title(message.getTitle())
+                .content(message.getBody())
                 .checked(false)
                 .build()
             )
