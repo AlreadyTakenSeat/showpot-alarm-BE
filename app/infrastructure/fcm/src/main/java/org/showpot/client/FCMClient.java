@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.metric.OpenApiMonitored;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,6 +21,7 @@ public class FCMClient {
 
     private final FirebaseMessaging firebaseMessaging;
 
+    @OpenApiMonitored(name = "fcmSingle")
     public void sendNotification(String fcmToken, Notification notification) {
         try {
             firebaseMessaging.send(
@@ -40,6 +42,7 @@ public class FCMClient {
         }
     }
 
+    @OpenApiMonitored(name = "fcmMulti")
     public void sendNotification(List<String> fcmTokens, Notification notification) {
         if (fcmTokens.size() > 500) {
             log.warn("한 번에 요청할 수 있는 푸시 알림의 수는 500개입니다.");

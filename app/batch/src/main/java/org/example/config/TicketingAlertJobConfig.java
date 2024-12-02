@@ -10,6 +10,7 @@ import org.quartz.TriggerListener;
 import org.quartz.spi.JobFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 @Configuration
@@ -19,7 +20,8 @@ public class TicketingAlertJobConfig {
     private final JobFactory jobFactory;
 
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean() {
+    @Primary
+    public SchedulerFactoryBean alarmSchedulerFactoryBean() {
         SchedulerFactoryBean schedulerFactory = new SchedulerFactoryBean();
         schedulerFactory.setJobFactory(jobFactory);
         schedulerFactory.setAutoStartup(true);
@@ -37,12 +39,12 @@ public class TicketingAlertJobConfig {
     }
 
     @Bean
-    public Scheduler ticketingAlertscheduler(
-        SchedulerFactoryBean schedulerFactoryBean,
+    public Scheduler ticketingAlertScheduler(
+        SchedulerFactoryBean alarmSchedulerFactoryBean,
         JobListener ticketingAlertJobListener,
         TriggerListener ticketingAlertTriggerListener
     ) throws SchedulerException {
-        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        Scheduler scheduler = alarmSchedulerFactoryBean.getScheduler();
         scheduler.getListenerManager().addJobListener(ticketingAlertJobListener);
         scheduler.getListenerManager().addTriggerListener(ticketingAlertTriggerListener);
 

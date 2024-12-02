@@ -11,7 +11,7 @@ spring:
         enabled: true
   docker:
     compose:
-      enabled: true
+      enabled: false
       lifecycle-management: start_and_stop
       stop:
         command: down
@@ -21,3 +21,12 @@ spring:
     redis:
       host: localhost
       port: 6379
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  endpoint:
+    prometheus:
+      enabled: true
