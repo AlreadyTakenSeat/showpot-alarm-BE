@@ -13,6 +13,9 @@ allprojects {
     dependencies {
         implementation project(":common")
 
+        // AOP
+        implementation "org.springframework.boot:spring-boot-starter-aop"
+
         testImplementation "org.springframework.boot:spring-boot-starter-test"
         testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
         testImplementation 'org.testcontainers:testcontainers:1.20.0'
@@ -35,4 +38,9 @@ dependencies {
 
     // aws logs
     implementation 'ca.pjer:logback-awslogs-appender:1.6.0'
+
+    // monitoring
+    implementation 'io.micrometer:micrometer-core'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }

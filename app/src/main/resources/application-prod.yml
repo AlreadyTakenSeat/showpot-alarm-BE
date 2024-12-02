@@ -22,3 +22,12 @@ cloud:
     credentials:
       accessKey: ${ACCESS_KEY}
       secretKey: ${SECRET_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  endpoint:
+    prometheus:
+      enabled: true
