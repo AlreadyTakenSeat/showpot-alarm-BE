@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TicketingAlertBatchComponent implements TicketingAlertBatch {
 
-    private final Scheduler ticketingAlertscheduler;
+    private final Scheduler ticketingAlertScheduler;
     private final TicketingAlertUseCase ticketingAlertUseCase;
 
     @PostConstruct
@@ -43,17 +43,17 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
     public void reserveTicketingAlerts(TicketingAlertServiceRequest ticketingAlert) {
         try {
             JobKey jobKey = getJobKey(ticketingAlert);
-            boolean jobExists = ticketingAlertscheduler.checkExists(jobKey);
+            boolean jobExists = ticketingAlertScheduler.checkExists(jobKey);
 
             if (!jobExists) {
                 JobDetail jobDetail = getJobDetail(ticketingAlert);
-                ticketingAlertscheduler.addJob(jobDetail, true, true);
+                ticketingAlertScheduler.addJob(jobDetail, true, true);
             }
 
             List<TriggerKey> triggerKeysToRemove = ticketingAlert.deleteAlertAts().stream()
                 .map(alertTime -> getTriggerKey(ticketingAlert, alertTime))
                 .toList();
-            ticketingAlertscheduler.unscheduleJobs(triggerKeysToRemove);
+            ticketingAlertScheduler.unscheduleJobs(triggerKeysToRemove);
 
             for (var alertTime : ticketingAlert.addAlertAts()) {
                 Trigger trigger = TriggerBuilder.newTrigger()
@@ -62,7 +62,7 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
                     .forJob(jobKey)
                     .build();
 
-                ticketingAlertscheduler.scheduleJob(trigger);
+                ticketingAlertScheduler.scheduleJob(trigger);
             }
         } catch (SchedulerException e) {
             throw new IllegalStateException(e.getMessage(), e);

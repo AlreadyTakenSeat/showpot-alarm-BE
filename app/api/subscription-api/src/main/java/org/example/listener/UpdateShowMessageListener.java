@@ -2,6 +2,7 @@ package org.example.listener;
 
 import lombok.RequiredArgsConstructor;
 import org.example.converter.SubscriptionMessageConverter;
+import org.example.metric.MessageQueueSubMonitored;
 import org.example.service.SubscriptionAlarmService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.connection.Message;
@@ -16,6 +17,7 @@ public class UpdateShowMessageListener implements MessageListener {
     private final SubscriptionAlarmService subscriptionAlarmService;
 
     @Override
+    @MessageQueueSubMonitored(topic = "updateShow")
     public void onMessage(Message message, byte[] pattern) {
         var request = SubscriptionMessageConverter.toShowRelationSubscriptionMessage(message);
         subscriptionAlarmService.showRelationSubscription(request.toServiceRequest());
