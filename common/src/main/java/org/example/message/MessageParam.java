@@ -25,7 +25,7 @@ public class MessageParam {
         StringBuilder title = new StringBuilder();
         title.append(showTitle).append(" 티켓팅이 ");
 
-        if(minutes.equals("60")) {
+        if (minutes.equals("60")) {
             title.append(1).append("시간 남았어요!");
             return title.toString();
         }
@@ -45,9 +45,9 @@ public class MessageParam {
     private String createBodySuffix(String minutes) {
         StringBuilder suffix = new StringBuilder();
 
-        if(minutes.equals("5")) {
-           suffix.append("예매가 시작됩니다!\n");
-           return suffix.toString();
+        if (minutes.equals("5")) {
+            suffix.append("예매가 시작됩니다!\n");
+            return suffix.toString();
         }
 
         return suffix.append("예매가 오픈됩니다!\n").toString();
