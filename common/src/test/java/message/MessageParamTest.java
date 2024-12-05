@@ -12,7 +12,7 @@ class MessageParamTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"5", "10", "30"})
-    @DisplayName("티켓팅_알림_시간_메시지를_분_단위_형식으로_제목을_만든다")
+    @DisplayName("티켓팅 알림 시간 메시지를 분 단위 형식으로 제목을 만든다")
     void createTitleWithMinutesUnit(String minutes) {
         //given & when
         MessageParam messageParam = MessageParam.builder()
@@ -27,7 +27,7 @@ class MessageParamTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"60", "120", "180"})
-    @DisplayName("티켓팅_알림_시간_메시지를_시_단위_형식으로_제목을_만든다")
+    @DisplayName("티켓팅 알림 시간 메시지를 시 단위 형식으로 제목을 만든다")
     void createTitleWithHoursUnit(String minutes) {
         //given & when
         MessageParam messageParam = MessageParam.builder()
@@ -41,7 +41,7 @@ class MessageParamTest {
     }
 
     @Test
-    @DisplayName("티켓팅_알림_시간_메시지중_5분일때_예매가_시작됨을_본문으로_만든다")
+    @DisplayName("티켓팅 알림 시간 메시지중 5분일때 예매가 시작됨을 본문으로 만든다")
     void createBodyReservationStartAtFiveMinutes() {
         //given & when
         MessageParam messageParam = MessageParam.builder()
@@ -56,7 +56,7 @@ class MessageParamTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"10", "30", "120"})
-    @DisplayName("티켓팅_알림_시간_메시지중_5분초과_일떄_예매가_오픈됨을_본문으로_만든다")
+    @DisplayName("티켓팅 알림 시간 메시지중 5분초과 일떄 예매가 오픈됨을 본문으로 만든다")
     void createBodyReservationOpenAfterFiveMinutes(String minutes) {
         //given & when
         MessageParam messageParam = MessageParam.builder()
