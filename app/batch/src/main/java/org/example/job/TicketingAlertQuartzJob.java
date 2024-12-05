@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.entity.ShowAlarm;
 import org.example.message.MessageParam;
-import org.example.message.PushMessageTemplate;
+import org.example.message.TicketingAlertMessage;
 import org.example.service.BatchMessage;
 import org.example.service.dto.request.SingleTargetMessageBatchRequest;
 import org.example.usecase.ShowAlarmUseCase;
@@ -39,7 +39,7 @@ public class TicketingAlertQuartzJob implements Job {
         UUID showId = UUID.fromString(context.getMergedJobDataMap().getString("showId"));
         String time = context.getTrigger().getKey().getGroup();
 
-        MessageParam message = PushMessageTemplate.getTicketingAlertMessageBeforeHours(name, time);
+        MessageParam message = TicketingAlertMessage.getTicketingAlertMessage(name, time);
         batchMessage.send(
             SingleTargetMessageBatchRequest.from(
                 userFcmToken,
@@ -50,8 +50,8 @@ public class TicketingAlertQuartzJob implements Job {
         showAlarmUseCase.save(ShowAlarm.builder()
             .userFcmToken(userFcmToken)
             .showId(showId)
-            .title(message.title())
-            .content(message.body())
+            .title(message.getTitle())
+            .content(message.getBody())
             .checked(false)
             .build()
         );

@@ -1,9 +1,9 @@
 package org.example.batch;
 
-import org.example.service.dto.response.TicketingAlertServiceResponse;
+import org.example.service.dto.response.TicketingAlertServiceRequest;
 
 public interface TicketingAlertBatch {
 
-    void reserveTicketingAlerts(TicketingAlertServiceResponse ticketingAlert);
+    void reserveTicketingAlerts(TicketingAlertServiceRequest ticketingAlert);
 
 }

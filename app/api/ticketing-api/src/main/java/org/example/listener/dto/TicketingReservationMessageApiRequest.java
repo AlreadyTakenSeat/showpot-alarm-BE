@@ -1,5 +1,6 @@
 package org.example.listener.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.example.service.dto.request.TicketingReservationMessageServiceRequest;
@@ -8,8 +9,9 @@ public record TicketingReservationMessageApiRequest(
     String userFcmToken,
     String name,
     UUID showId,
-    List<TicketingTimeMessageApiRequest> addAts,
-    List<TicketingTimeMessageApiRequest> deleteAts
+    String ticketingAt,
+    List<String> addAlertAts,
+    List<String> deleteAlertAts
 ) {
 
     public TicketingReservationMessageServiceRequest toServiceRequest() {
@@ -17,8 +19,9 @@ public record TicketingReservationMessageApiRequest(
             .userFcmToken(userFcmToken)
             .name(name)
             .showId(showId)
-            .addAts(addAts.stream().map(TicketingTimeMessageApiRequest::toServiceRequest).toList())
-            .deleteAts(deleteAts.stream().map(TicketingTimeMessageApiRequest::toServiceRequest).toList())
+            .ticketingAt(LocalDateTime.parse(ticketingAt))
+            .addAlertAts(addAlertAts.stream().map(LocalDateTime::parse).toList())
+            .deleteAlertAts(deleteAlertAts.stream().map(LocalDateTime::parse).toList())
             .build();
     }
 }

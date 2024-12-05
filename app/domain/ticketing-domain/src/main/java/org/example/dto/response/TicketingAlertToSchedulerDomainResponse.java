@@ -1,5 +1,6 @@
 package org.example.dto.response;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
@@ -11,35 +12,38 @@ public record TicketingAlertToSchedulerDomainResponse(
     String name,
     String userFcmToken,
     UUID showId,
-    List<TicketingAlertTimeDomainResponse> alertTimesToAdd,
-    List<TicketingAlertTimeDomainResponse> alertTimesToRemove
+    LocalDateTime ticketingAt,
+    List<LocalDateTime> addAlertAts,
+    List<LocalDateTime> deleteAlertAts
 ) {
 
     public static TicketingAlertToSchedulerDomainResponse as(
         TicketingReservationMessageDomainRequest request,
-        List<TicketingAlertTimeDomainResponse> alertTimesToAdd,
-        List<TicketingAlertTimeDomainResponse> alertTimesToRemove
+        List<LocalDateTime> addAlertAts,
+        List<LocalDateTime> deleteAlertAts
     ) {
         return TicketingAlertToSchedulerDomainResponse.builder()
             .name(request.name())
             .userFcmToken(request.userFcmToken())
             .showId(request.showId())
-            .alertTimesToAdd(alertTimesToAdd)
-            .alertTimesToRemove(alertTimesToRemove)
+            .ticketingAt(request.ticketingAt())
+            .addAlertAts(addAlertAts)
+            .deleteAlertAts(deleteAlertAts)
             .build();
     }
 
 
     public static TicketingAlertToSchedulerDomainResponse as(
         TicketingAlertTargetDomainResponse key,
-        List<TicketingAlertTimeDomainResponse> value
+        List<LocalDateTime> value
     ) {
         return TicketingAlertToSchedulerDomainResponse.builder()
             .name(key.name())
             .userFcmToken(key.userFcmToken())
             .showId(key.showId())
-            .alertTimesToAdd(value)
-            .alertTimesToRemove(List.of())
+            .ticketingAt(key.ticketingAt())
+            .addAlertAts(value)
+            .deleteAlertAts(List.of())
             .build();
     }
 }
