@@ -25,8 +25,8 @@ public class MessageParam {
         StringBuilder title = new StringBuilder();
         title.append(showTitle).append(" 티켓팅이 ");
 
-        if (minutes.equals("60")) {
-            title.append(1).append("시간 남았어요!");
+        if (isHourUnit(minutes)) {
+            title.append(getHour(minutes)).append("시간 남았어요!");
             return title.toString();
         }
 
@@ -35,8 +35,8 @@ public class MessageParam {
 
     private String createBodyPrefix(String minutes) {
         StringBuilder prefix = new StringBuilder();
-        if (minutes.equals("60")) {
-            return prefix.append(1).append("시간 후, ").toString();
+        if (isHourUnit(minutes)) {
+            return prefix.append(getHour(minutes)).append("시간 후, ").toString();
         }
 
         return prefix.append(minutes).append("분 후, ").toString();
@@ -53,4 +53,11 @@ public class MessageParam {
         return suffix.append("예매가 오픈됩니다!\n").toString();
     }
 
+    private boolean isHourUnit(String minutes) {
+        return Integer.parseInt(minutes) % 60 == 0;
+    }
+
+    private static int getHour(String minutes) {
+        return Integer.parseInt(minutes) / 60;
+    }
 }
