@@ -30,7 +30,7 @@ public class MessageParam {
             return title.toString();
         }
 
-        return minutes + "분 남았어요!";
+        return title.append(minutes).append("분 남았어요!").toString();
     }
 
     private String createBodyPrefix(String minutes) {
@@ -46,11 +46,11 @@ public class MessageParam {
         StringBuilder suffix = new StringBuilder();
 
         if (minutes.equals("5")) {
-            suffix.append("예매가 시작됩니다!\n");
+            suffix.append(" 예매가 시작됩니다! ");
             return suffix.toString();
         }
 
-        return suffix.append("예매가 오픈됩니다!\n").toString();
+        return suffix.append(" 예매가 오픈됩니다! ").toString();
     }
 
     private boolean isHourUnit(String minutes) {

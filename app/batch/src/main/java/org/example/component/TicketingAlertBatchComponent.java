@@ -101,7 +101,7 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("userFcmToken", ticketingAlert.userFcmToken());
         jobDataMap.put("name", ticketingAlert.name());
-        jobDataMap.put("showId", ticketingAlert.showId());
+        jobDataMap.put("showId", ticketingAlert.showId().toString());
         jobDataMap.put("retryCount", 0);
 
         return JobBuilder.newJob(TicketingAlertQuartzJob.class)
