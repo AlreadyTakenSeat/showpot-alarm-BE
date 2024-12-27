@@ -50,23 +50,14 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
                 ticketingAlertScheduler.addJob(jobDetail, true, true);
             }
 
-            LocalDateTime currentTime = LocalDateTime.now();
-
             List<TriggerKey> triggerKeysToRemove = ticketingAlert.deleteAlertAts().stream()
-                .map(alertTime -> getTriggerKey(ticketingAlert, currentTime, alertTime))
+                .map(alertTime -> getTriggerKey(ticketingAlert, alertTime))
                 .toList();
             ticketingAlertScheduler.unscheduleJobs(triggerKeysToRemove);
 
-            List<LocalDateTime> currentTimePlusSeconds = List.of(
-                currentTime.minusSeconds(5),
-                currentTime.minusSeconds(10),
-                currentTime.minusSeconds(30),
-                currentTime.minusSeconds(60)
-            );
-
-            for (LocalDateTime alertTime : currentTimePlusSeconds) {
+            for (LocalDateTime alertTime : ticketingAlert.addAlertAts()) {
                 Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity(getTriggerKey(ticketingAlert, currentTime, alertTime))
+                    .withIdentity(getTriggerKey(ticketingAlert, alertTime))
                     .startAt(Date.from(alertTime.atZone(ZoneId.systemDefault()).toInstant()))
                     .forJob(jobKey)
                     .build();
@@ -80,19 +71,18 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
 
     private TriggerKey getTriggerKey(
         TicketingAlertServiceRequest ticketingAlert,
-        LocalDateTime currentTime,
         LocalDateTime alertTime
     ) {
         return TriggerKey.triggerKey(
             ticketingAlert.userFcmToken() + " : "
                 + ticketingAlert.showId() + " : "
                 + alertTime,
-            calculateAlertMinutes(alertTime, currentTime)
+            calculateAlertMinutes(alertTime, ticketingAlert.ticketingAt())
         );
     }
 
     private String calculateAlertMinutes(LocalDateTime alertTime, LocalDateTime ticketingAt) {
-        return String.valueOf(Duration.between(alertTime, ticketingAt).toSeconds());
+        return String.valueOf(Duration.between(alertTime, ticketingAt).toMinutes());
     }
 
     private JobDetail getJobDetail(TicketingAlertServiceRequest ticketingAlert) {
