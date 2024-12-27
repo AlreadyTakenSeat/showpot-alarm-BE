@@ -55,7 +55,7 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
                 .toList();
             ticketingAlertScheduler.unscheduleJobs(triggerKeysToRemove);
 
-            for (var alertTime : ticketingAlert.addAlertAts()) {
+            for (LocalDateTime alertTime : ticketingAlert.addAlertAts()) {
                 Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity(getTriggerKey(ticketingAlert, alertTime))
                     .startAt(Date.from(alertTime.atZone(ZoneId.systemDefault()).toInstant()))
@@ -81,7 +81,7 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
         );
     }
 
-    private  String calculateAlertMinutes(LocalDateTime alertTime, LocalDateTime ticketingAt) {
+    private String calculateAlertMinutes(LocalDateTime alertTime, LocalDateTime ticketingAt) {
         return String.valueOf(Duration.between(alertTime, ticketingAt).toMinutes());
     }
 
@@ -91,7 +91,7 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("userFcmToken", ticketingAlert.userFcmToken());
         jobDataMap.put("name", ticketingAlert.name());
-        jobDataMap.put("showId", ticketingAlert.showId());
+        jobDataMap.put("showId", ticketingAlert.showId().toString());
         jobDataMap.put("retryCount", 0);
 
         return JobBuilder.newJob(TicketingAlertQuartzJob.class)

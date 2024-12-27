@@ -1,5 +1,7 @@
 spring:
   jpa:
+    properties:
+      hibernate.jdbc.time_zone: Asia/Seoul
     hibernate:
       ddl-auto: none
     show-sql: true
