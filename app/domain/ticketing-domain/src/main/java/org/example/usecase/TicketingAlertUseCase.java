@@ -22,7 +22,7 @@ public class TicketingAlertUseCase {
 
     public List<TicketingAlertToSchedulerDomainResponse> findAllTicketingAlerts() {
         Map<TicketingAlertTargetDomainResponse, List<LocalDateTime>> groupedAlerts =
-            ticketingAlertRepository.findAllByIsDeletedFalse()
+            ticketingAlertRepository.findAllByIsDeletedFalseAndAlertTimeAfter(LocalDateTime.now())
                 .stream()
                 .collect(Collectors.groupingBy(
                     TicketingAlertTargetDomainResponse::from,
