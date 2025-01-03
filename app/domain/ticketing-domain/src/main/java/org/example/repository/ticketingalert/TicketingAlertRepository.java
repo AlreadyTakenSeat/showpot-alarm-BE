@@ -1,5 +1,6 @@
 package org.example.repository.ticketingalert;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.example.entity.TicketingAlert;
@@ -12,5 +13,5 @@ public interface TicketingAlertRepository extends JpaRepository<TicketingAlert, 
         UUID showId
     );
 
-    List<TicketingAlert> findAllByIsDeletedFalse();
+    List<TicketingAlert> findAllByIsDeletedFalseAndAlertTimeAfter(LocalDateTime alertTime);
 }
