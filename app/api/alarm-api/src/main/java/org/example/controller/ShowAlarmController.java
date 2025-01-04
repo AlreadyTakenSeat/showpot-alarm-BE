@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import jakarta.validation.constraints.Max;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class ShowAlarmController {
     public ResponseEntity<PaginationApiResponse<ShowAlarmPaginationApiParam>> getShowAlarms(
         @RequestParam(value = "fcmToken") String fcmToken,
         @RequestParam(value = "cursorId", required = false) UUID cursorId,
+        @RequestParam(value = "cursorValue", required = false) LocalDateTime cursorValue,
         @RequestParam(value = "size") @Max(value = 30, message = "조회하는 데이터의 최대 개수는 30입니다.")
         Integer size
     ) {
@@ -35,6 +37,7 @@ public class ShowAlarmController {
             ShowAlarmsServiceRequest.builder()
                 .fcmToken(fcmToken)
                 .cursorId(cursorId)
+                .cursorValue(cursorValue)
                 .size(size)
                 .build()
         );
@@ -43,7 +46,7 @@ public class ShowAlarmController {
             .toList();
 
         CursorApiResponse cursor = Optional.ofNullable(CursorApiResponse.getLastElement(data))
-            .map(element -> CursorApiResponse.toCursorId(element.id()))
+            .map(element -> CursorApiResponse.toCursorResponse(element.id(), element.createAt()))
             .orElse(CursorApiResponse.noneCursor());
 
         return ResponseEntity.ok(
