@@ -55,7 +55,7 @@ public class GenreSubscriptionUseCase {
     public void genreUnsubscribe(GenreSubscriptionMessageDomainRequest request) {
         var genreIds = request.genres().stream()
             .map(GenreMessageDomainRequest::genreId)
-            .toList();
+            .collect(Collectors.toSet());
 
         var artistSubscriptions = genreSubscriptionRepository.findSubscriptionList(
             request.userFcmToken());

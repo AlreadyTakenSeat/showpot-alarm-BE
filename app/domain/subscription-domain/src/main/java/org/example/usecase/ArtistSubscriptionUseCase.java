@@ -55,7 +55,7 @@ public class ArtistSubscriptionUseCase {
     public void artistUnsubscribe(ArtistSubscriptionMessageDomainRequest request) {
         var artistIds = request.artists().stream()
             .map(ArtistMessageDomainRequest::artistId)
-            .toList();
+            .collect(Collectors.toSet());
 
         var artistSubscriptions = artistSubscriptionRepository.findSubscriptionList(
             request.userFcmToken());
