@@ -21,12 +21,12 @@ public class UserApiConfig {
 
 
     @Bean
-    MessageListenerAdapter updateUserFcmTokenListenerAdapter() {
+    public MessageListenerAdapter updateUserFcmTokenListenerAdapter() {
         return new MessageListenerAdapter(updateUserFcmTokenListener);
     }
 
     @Bean
-    RedisMessageListenerContainer updateUserFcmTokenListenerContainer(
+    public RedisMessageListenerContainer updateUserFcmTokenListenerContainer(
         RedisConnectionFactory connectionFactory,
         MessageListenerAdapter updateUserFcmTokenListenerAdapter
     ) {
