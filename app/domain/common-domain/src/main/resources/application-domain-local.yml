@@ -8,10 +8,8 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
-    open-in-view: false
     generate-ddl: true
     properties:
       hibernate:
         format_sql: true
         highlight_sql: true
-        use_sql_comments: true
