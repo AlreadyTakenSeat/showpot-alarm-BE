@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.request.GenreMessageDomainRequest;
 import org.example.dto.request.GenreSubscriptionMessageDomainRequest;
+import org.example.dto.request.UserFcmTokenDomainRequest;
 import org.example.dto.response.GenreSubscriptionDomainResponse;
 import org.example.entity.GenreSubscription;
 import org.example.repository.subscription.genresubscription.GenreSubscriptionRepository;
@@ -19,7 +20,8 @@ public class GenreSubscriptionUseCase {
 
     private final GenreSubscriptionRepository genreSubscriptionRepository;
 
-    public List<GenreSubscriptionDomainResponse> findGenreSubscriptionsByGenreIds(List<UUID> genreIds) {
+    public List<GenreSubscriptionDomainResponse> findGenreSubscriptionsByGenreIds(
+        List<UUID> genreIds) {
         return genreSubscriptionRepository.findGenreSubscriptionsByGenreIds(genreIds);
     }
 
@@ -55,11 +57,22 @@ public class GenreSubscriptionUseCase {
             .map(GenreMessageDomainRequest::genreId)
             .toList();
 
-        var artistSubscriptions = genreSubscriptionRepository.findSubscriptionList(request.userFcmToken());
+        var artistSubscriptions = genreSubscriptionRepository.findSubscriptionList(
+            request.userFcmToken());
         var filteredSubscription = artistSubscriptions.stream()
             .filter(it -> genreIds.contains(it.getGenreId()))
             .toList();
 
         filteredSubscription.forEach(GenreSubscription::unsubscribe);
+    }
+
+    public void updateUserFcmToken(UserFcmTokenDomainRequest request) {
+        List<GenreSubscription> genreSubscriptions = genreSubscriptionRepository.findAllByUserFcmToken(
+            request.previousFcmToken());
+
+        genreSubscriptions.forEach(genreSubscription -> {
+            genreSubscription.updateUserFcmToken(request.updatedFcmToken());
+            genreSubscriptionRepository.save(genreSubscription);
+        });
     }
 }
