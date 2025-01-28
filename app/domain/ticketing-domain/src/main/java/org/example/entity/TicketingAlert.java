@@ -35,11 +35,12 @@ public class TicketingAlert extends BaseEntity {
 
     @Builder
     private TicketingAlert(
-            String name,
-            LocalDateTime alertTime,
-            UUID userId,
-            UUID showId,
-            LocalDateTime ticketingTime) {
+        String name,
+        LocalDateTime alertTime,
+        UUID userId,
+        UUID showId,
+        LocalDateTime ticketingTime
+    ) {
         this.name = name;
         this.alertTime = alertTime;
         this.userId = userId;

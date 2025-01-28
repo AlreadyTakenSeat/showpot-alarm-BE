@@ -23,24 +23,24 @@ public record TicketingAlertToSchedulerDomainResponse(
             List<LocalDateTime> addAlertAts,
             List<LocalDateTime> deleteAlertAts) {
         return TicketingAlertToSchedulerDomainResponse.builder()
-                .name(request.name())
-                .userId(request.userId())
-                .showId(request.showId())
-                .ticketingAt(request.ticketingAt())
-                .addAlertAts(addAlertAts)
-                .deleteAlertAts(deleteAlertAts)
-                .build();
+            .name(request.name())
+            .userId(request.userId())
+            .showId(request.showId())
+            .ticketingAt(request.ticketingAt())
+            .addAlertAts(addAlertAts)
+            .deleteAlertAts(deleteAlertAts)
+            .build();
     }
 
     public static TicketingAlertToSchedulerDomainResponse as(
             TicketingAlertTargetDomainResponse key, List<LocalDateTime> value) {
         return TicketingAlertToSchedulerDomainResponse.builder()
-                .name(key.name())
-                .userId(key.userId())
-                .showId(key.showId())
-                .ticketingAt(key.ticketingAt())
-                .addAlertAts(value)
-                .deleteAlertAts(List.of())
-                .build();
+            .name(key.name())
+            .userId(key.userId())
+            .showId(key.showId())
+            .ticketingAt(key.ticketingAt())
+            .addAlertAts(value)
+            .deleteAlertAts(List.of())
+            .build();
     }
 }

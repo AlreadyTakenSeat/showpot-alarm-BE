@@ -18,12 +18,12 @@ public record TicketingAlertServiceRequest(
     public static TicketingAlertServiceRequest from(
             TicketingAlertToSchedulerDomainResponse ticketingAlert) {
         return TicketingAlertServiceRequest.builder()
-                .name(ticketingAlert.name())
-                .userId(ticketingAlert.userId())
-                .showId(ticketingAlert.showId())
-                .ticketingAt(ticketingAlert.ticketingAt())
-                .addAlertAts(ticketingAlert.addAlertAts())
-                .deleteAlertAts(ticketingAlert.deleteAlertAts())
-                .build();
+            .name(ticketingAlert.name())
+            .userId(ticketingAlert.userId())
+            .showId(ticketingAlert.showId())
+            .ticketingAt(ticketingAlert.ticketingAt())
+            .addAlertAts(ticketingAlert.addAlertAts())
+            .deleteAlertAts(ticketingAlert.deleteAlertAts())
+            .build();
     }
 }

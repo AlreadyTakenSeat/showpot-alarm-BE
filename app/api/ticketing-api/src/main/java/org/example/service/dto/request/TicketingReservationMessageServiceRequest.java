@@ -17,12 +17,12 @@ public record TicketingReservationMessageServiceRequest(
 
     public TicketingReservationMessageDomainRequest toDomainRequest() {
         return TicketingReservationMessageDomainRequest.builder()
-                .userId(userId)
-                .name(name)
-                .showId(showId)
-                .ticketingAt(ticketingAt)
-                .addAlertAts(addAlertAts)
-                .deleteAlertAts(deleteAlertAts)
-                .build();
+            .userId(userId)
+            .name(name)
+            .showId(showId)
+            .ticketingAt(ticketingAt)
+            .addAlertAts(addAlertAts)
+            .deleteAlertAts(deleteAlertAts)
+            .build();
     }
 }

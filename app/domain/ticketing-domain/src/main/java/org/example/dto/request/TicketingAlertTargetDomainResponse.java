@@ -12,10 +12,10 @@ public record TicketingAlertTargetDomainResponse(
         UUID userId, UUID showId, String name, LocalDateTime ticketingAt) {
     public static TicketingAlertTargetDomainResponse from(TicketingAlert ticketingAlert) {
         return TicketingAlertTargetDomainResponse.builder()
-                .userId(ticketingAlert.getUserId())
-                .showId(ticketingAlert.getShowId())
-                .name(ticketingAlert.getName())
-                .ticketingAt(ticketingAlert.getTicketingTime())
-                .build();
+            .userId(ticketingAlert.getUserId())
+            .showId(ticketingAlert.getShowId())
+            .name(ticketingAlert.getName())
+            .ticketingAt(ticketingAlert.getTicketingTime())
+            .build();
     }
 }

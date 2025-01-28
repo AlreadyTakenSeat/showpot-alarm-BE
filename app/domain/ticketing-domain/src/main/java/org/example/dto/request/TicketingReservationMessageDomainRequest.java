@@ -12,4 +12,6 @@ public record TicketingReservationMessageDomainRequest(
         UUID showId,
         LocalDateTime ticketingAt,
         List<LocalDateTime> addAlertAts,
-        List<LocalDateTime> deleteAlertAts) {}
+        List<LocalDateTime> deleteAlertAts
+) {
+}
