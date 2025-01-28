@@ -1,10 +1,9 @@
 package org.example.listener.dto;
 
-import org.example.service.dto.request.TicketingReservationMessageServiceRequest;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import org.example.service.dto.request.TicketingReservationMessageServiceRequest;
 
 public record TicketingReservationMessageApiRequest(
         UUID userId,

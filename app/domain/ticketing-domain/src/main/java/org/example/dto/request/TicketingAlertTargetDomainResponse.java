@@ -1,11 +1,9 @@
 package org.example.dto.request;
 
-import lombok.Builder;
-
-import org.example.entity.TicketingAlert;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.Builder;
+import org.example.entity.TicketingAlert;
 
 @Builder
 public record TicketingAlertTargetDomainResponse(

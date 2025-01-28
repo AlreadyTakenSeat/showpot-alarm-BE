@@ -1,9 +1,12 @@
 package org.example.component;
 
 import jakarta.annotation.PostConstruct;
-
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-
 import org.example.batch.TicketingAlertBatch;
 import org.example.dto.response.TicketingAlertToSchedulerDomainResponse;
 import org.example.job.TicketingAlertQuartzJob;
@@ -19,12 +22,6 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.springframework.stereotype.Component;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
