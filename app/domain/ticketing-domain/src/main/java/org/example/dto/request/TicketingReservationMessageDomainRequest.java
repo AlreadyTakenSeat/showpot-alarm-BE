@@ -7,11 +7,11 @@ import lombok.Builder;
 
 @Builder
 public record TicketingReservationMessageDomainRequest(
-        UUID userId,
-        String name,
-        UUID showId,
-        LocalDateTime ticketingAt,
-        List<LocalDateTime> addAlertAts,
-        List<LocalDateTime> deleteAlertAts
+    UUID userId,
+    String name,
+    UUID showId,
+    LocalDateTime ticketingAt,
+    List<LocalDateTime> addAlertAts,
+    List<LocalDateTime> deleteAlertAts
 ) {
 }
