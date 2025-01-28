@@ -43,12 +43,8 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
     public void reserveTicketingAlerts(TicketingAlertServiceRequest ticketingAlert) {
         try {
             JobKey jobKey = getJobKey(ticketingAlert);
-            boolean jobExists = ticketingAlertScheduler.checkExists(jobKey);
-
-            if (!jobExists) {
-                JobDetail jobDetail = getJobDetail(ticketingAlert);
-                ticketingAlertScheduler.addJob(jobDetail, true, true);
-            }
+            JobDetail jobDetail = getJobDetail(ticketingAlert);
+            ticketingAlertScheduler.addJob(jobDetail, true, true);
 
             List<TriggerKey> triggerKeysToRemove = ticketingAlert.deleteAlertAts().stream()
                 .map(alertTime -> getTriggerKey(ticketingAlert, alertTime))
@@ -74,7 +70,7 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
         LocalDateTime alertTime
     ) {
         return TriggerKey.triggerKey(
-            ticketingAlert.userFcmToken() + " : "
+            ticketingAlert.userId() + " : "
                 + ticketingAlert.showId() + " : "
                 + alertTime,
             calculateAlertMinutes(alertTime, ticketingAlert.ticketingAt())
@@ -89,7 +85,7 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
         JobKey jobKey = getJobKey(ticketingAlert);
 
         JobDataMap jobDataMap = new JobDataMap();
-        jobDataMap.put("userFcmToken", ticketingAlert.userFcmToken());
+        jobDataMap.put("userFcmToken", ticketingAlert.userId());
         jobDataMap.put("name", ticketingAlert.name());
         jobDataMap.put("showId", ticketingAlert.showId().toString());
         jobDataMap.put("retryCount", 0);
@@ -102,7 +98,7 @@ public class TicketingAlertBatchComponent implements TicketingAlertBatch {
 
     private JobKey getJobKey(TicketingAlertServiceRequest ticketingAlert) {
         return new JobKey(
-            ticketingAlert.userFcmToken() + " : "
+            ticketingAlert.userId() + " : "
                 + ticketingAlert.showId()
         );
     }

@@ -7,18 +7,13 @@ import org.example.entity.TicketingAlert;
 
 @Builder
 public record TicketingAlertTargetDomainResponse(
-    String userFcmToken,
-    UUID showId,
-    String name,
-    LocalDateTime ticketingAt
-) {
+        UUID userId, UUID showId, String name, LocalDateTime ticketingAt) {
     public static TicketingAlertTargetDomainResponse from(TicketingAlert ticketingAlert) {
         return TicketingAlertTargetDomainResponse.builder()
-            .userFcmToken(ticketingAlert.getUserFcmToken())
+            .userId(ticketingAlert.getUserId())
             .showId(ticketingAlert.getShowId())
             .name(ticketingAlert.getName())
             .ticketingAt(ticketingAlert.getTicketingTime())
             .build();
     }
-
 }

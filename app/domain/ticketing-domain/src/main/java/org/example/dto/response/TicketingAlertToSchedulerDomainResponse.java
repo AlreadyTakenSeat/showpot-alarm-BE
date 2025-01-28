@@ -9,22 +9,20 @@ import org.example.dto.request.TicketingReservationMessageDomainRequest;
 
 @Builder
 public record TicketingAlertToSchedulerDomainResponse(
-    String name,
-    String userFcmToken,
-    UUID showId,
-    LocalDateTime ticketingAt,
-    List<LocalDateTime> addAlertAts,
-    List<LocalDateTime> deleteAlertAts
-) {
+        String name,
+        UUID userId,
+        UUID showId,
+        LocalDateTime ticketingAt,
+        List<LocalDateTime> addAlertAts,
+        List<LocalDateTime> deleteAlertAts) {
 
     public static TicketingAlertToSchedulerDomainResponse as(
-        TicketingReservationMessageDomainRequest request,
-        List<LocalDateTime> addAlertAts,
-        List<LocalDateTime> deleteAlertAts
-    ) {
+            TicketingReservationMessageDomainRequest request,
+            List<LocalDateTime> addAlertAts,
+            List<LocalDateTime> deleteAlertAts) {
         return TicketingAlertToSchedulerDomainResponse.builder()
             .name(request.name())
-            .userFcmToken(request.userFcmToken())
+            .userId(request.userId())
             .showId(request.showId())
             .ticketingAt(request.ticketingAt())
             .addAlertAts(addAlertAts)
@@ -32,14 +30,11 @@ public record TicketingAlertToSchedulerDomainResponse(
             .build();
     }
 
-
     public static TicketingAlertToSchedulerDomainResponse as(
-        TicketingAlertTargetDomainResponse key,
-        List<LocalDateTime> value
-    ) {
+            TicketingAlertTargetDomainResponse key, List<LocalDateTime> value) {
         return TicketingAlertToSchedulerDomainResponse.builder()
             .name(key.name())
-            .userFcmToken(key.userFcmToken())
+            .userId(key.userId())
             .showId(key.showId())
             .ticketingAt(key.ticketingAt())
             .addAlertAts(value)

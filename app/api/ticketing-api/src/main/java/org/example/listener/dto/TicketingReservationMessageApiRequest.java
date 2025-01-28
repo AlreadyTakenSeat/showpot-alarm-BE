@@ -6,17 +6,16 @@ import java.util.UUID;
 import org.example.service.dto.request.TicketingReservationMessageServiceRequest;
 
 public record TicketingReservationMessageApiRequest(
-    String userFcmToken,
-    String name,
-    UUID showId,
-    String ticketingAt,
-    List<String> addAlertAts,
-    List<String> deleteAlertAts
-) {
+        UUID userId,
+        String name,
+        UUID showId,
+        String ticketingAt,
+        List<String> addAlertAts,
+        List<String> deleteAlertAts) {
 
     public TicketingReservationMessageServiceRequest toServiceRequest() {
         return TicketingReservationMessageServiceRequest.builder()
-            .userFcmToken(userFcmToken)
+            .userId(userId)
             .name(name)
             .showId(showId)
             .ticketingAt(LocalDateTime.parse(ticketingAt))

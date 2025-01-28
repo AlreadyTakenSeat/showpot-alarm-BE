@@ -8,10 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TicketingAlertRepository extends JpaRepository<TicketingAlert, UUID> {
 
-    List<TicketingAlert> findAllByUserFcmTokenAndShowIdAndIsDeletedFalse(
-        String userFcmToken,
-        UUID showId
-    );
+    List<TicketingAlert> findAllByUserIdAndShowIdAndIsDeletedFalse(UUID userId, UUID showId);
 
     List<TicketingAlert> findAllByIsDeletedFalseAndAlertTimeAfter(LocalDateTime alertTime);
 }

@@ -8,20 +8,18 @@ import org.example.dto.response.TicketingAlertToSchedulerDomainResponse;
 
 @Builder
 public record TicketingAlertServiceRequest(
-    String name,
-    String userFcmToken,
-    UUID showId,
-    LocalDateTime ticketingAt,
-    List<LocalDateTime> addAlertAts,
-    List<LocalDateTime> deleteAlertAts
-) {
+        String name,
+        UUID userId,
+        UUID showId,
+        LocalDateTime ticketingAt,
+        List<LocalDateTime> addAlertAts,
+        List<LocalDateTime> deleteAlertAts) {
 
     public static TicketingAlertServiceRequest from(
-        TicketingAlertToSchedulerDomainResponse ticketingAlert
-    ) {
+            TicketingAlertToSchedulerDomainResponse ticketingAlert) {
         return TicketingAlertServiceRequest.builder()
             .name(ticketingAlert.name())
-            .userFcmToken(ticketingAlert.userFcmToken())
+            .userId(ticketingAlert.userId())
             .showId(ticketingAlert.showId())
             .ticketingAt(ticketingAlert.ticketingAt())
             .addAlertAts(ticketingAlert.addAlertAts())
