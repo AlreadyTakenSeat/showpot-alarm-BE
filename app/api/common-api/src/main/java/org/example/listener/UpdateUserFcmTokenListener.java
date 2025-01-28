@@ -1,6 +1,7 @@
-package org.example.listner;
+package org.example.listener;
 
 import lombok.RequiredArgsConstructor;
+
 import org.example.conver.UserMessageConverter;
 import org.example.metric.MessageQueueSubMonitored;
 import org.example.service.UserSubscriptionService;

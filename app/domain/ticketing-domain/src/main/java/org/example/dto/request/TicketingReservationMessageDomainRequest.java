@@ -7,12 +7,9 @@ import lombok.Builder;
 
 @Builder
 public record TicketingReservationMessageDomainRequest(
-    String userFcmToken,
-    String name,
-    UUID showId,
-    LocalDateTime ticketingAt,
-    List<LocalDateTime> addAlertAts,
-    List<LocalDateTime> deleteAlertAts
-) {
-
-}
+        UUID userId,
+        String name,
+        UUID showId,
+        LocalDateTime ticketingAt,
+        List<LocalDateTime> addAlertAts,
+        List<LocalDateTime> deleteAlertAts) {}

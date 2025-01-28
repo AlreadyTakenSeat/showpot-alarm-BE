@@ -6,22 +6,21 @@ import java.util.UUID;
 import org.example.service.dto.request.TicketingReservationMessageServiceRequest;
 
 public record TicketingReservationMessageApiRequest(
-    String userFcmToken,
-    String name,
-    UUID showId,
-    String ticketingAt,
-    List<String> addAlertAts,
-    List<String> deleteAlertAts
-) {
+        UUID userId,
+        String name,
+        UUID showId,
+        String ticketingAt,
+        List<String> addAlertAts,
+        List<String> deleteAlertAts) {
 
     public TicketingReservationMessageServiceRequest toServiceRequest() {
         return TicketingReservationMessageServiceRequest.builder()
-            .userFcmToken(userFcmToken)
-            .name(name)
-            .showId(showId)
-            .ticketingAt(LocalDateTime.parse(ticketingAt))
-            .addAlertAts(addAlertAts.stream().map(LocalDateTime::parse).toList())
-            .deleteAlertAts(deleteAlertAts.stream().map(LocalDateTime::parse).toList())
-            .build();
+                .userId(userId)
+                .name(name)
+                .showId(showId)
+                .ticketingAt(LocalDateTime.parse(ticketingAt))
+                .addAlertAts(addAlertAts.stream().map(LocalDateTime::parse).toList())
+                .deleteAlertAts(deleteAlertAts.stream().map(LocalDateTime::parse).toList())
+                .build();
     }
 }
