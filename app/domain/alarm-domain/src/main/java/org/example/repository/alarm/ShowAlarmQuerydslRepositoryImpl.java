@@ -39,7 +39,8 @@ public class ShowAlarmQuerydslRepositoryImpl implements ShowAlarmQuerydslReposit
                 )
             )
             .from(showAlarm)
-            .where(getDefaultPredicateInCursorPagination(request.cursorId(), request.cursorValue()))
+            .where(getDefaultPredicateInCursorPagination(request.fcmToken(), request.cursorId(),
+                request.cursorValue()))
             .orderBy(
                 showAlarm.createdAt.desc(),
                 showAlarm.id.asc()
@@ -59,10 +60,12 @@ public class ShowAlarmQuerydslRepositoryImpl implements ShowAlarmQuerydslReposit
     }
 
     private Predicate getDefaultPredicateInCursorPagination(
+        String fcmToken,
         UUID cursorId,
         LocalDateTime cursorValue
     ) {
-        BooleanExpression wherePredicate = showAlarm.isDeleted.isFalse();
+        BooleanExpression wherePredicate = showAlarm.userFcmToken.eq(fcmToken)
+            .and(showAlarm.isDeleted.isFalse());
         if (cursorId != null && cursorValue != null) {
             wherePredicate = wherePredicate.and(
                 showAlarm.createdAt.lt(cursorValue)
