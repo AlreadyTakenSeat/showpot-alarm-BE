@@ -42,9 +42,15 @@ public class TicketingAlertUseCase {
     }
 
     @Transactional
-    public void updateUserFcmToken(String previousFcmToken, String updatedFcmToken) {
-        ticketingAlertRepository.findAllByFcmTokenAndAlertTimeAfterNow(previousFcmToken, LocalDateTime.now())
-            .forEach(ticketingAlert -> ticketingAlert.updateUserFcmToken(updatedFcmToken));
+    public List<TicketingAlert> updateUserFcmToken(
+        String previousFcmToken,
+        String updatedFcmToken) {
+        List<TicketingAlert> ticketingAlerts = ticketingAlertRepository.findAllByFcmTokenAndAlertTimeAfterNow(
+            previousFcmToken, LocalDateTime.now());
+        ticketingAlerts.forEach(
+            ticketingAlert -> ticketingAlert.updateUserFcmToken(updatedFcmToken));
+
+        return ticketingAlerts;
     }
 
     @Transactional
