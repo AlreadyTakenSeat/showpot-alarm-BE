@@ -42,6 +42,12 @@ public class TicketingAlertUseCase {
     }
 
     @Transactional
+    public void updateUserFcmToken(String previousFcmToken, String updatedFcmToken) {
+        ticketingAlertRepository.findAllByFcmTokenAndAlertTimeAfterNow(previousFcmToken, LocalDateTime.now())
+            .forEach(ticketingAlert -> ticketingAlert.updateUserFcmToken(updatedFcmToken));
+    }
+
+    @Transactional
     public TicketingAlertToSchedulerDomainResponse reserveTicketingAlert(
         TicketingReservationMessageDomainRequest ticketingReservations
     ) {

@@ -45,4 +45,8 @@ public class TicketingAlert extends BaseEntity {
         this.showId = showId;
         this.ticketingTime = ticketingTime;
     }
+
+    public void updateUserFcmToken(String userFcmToken) {
+        this.userFcmToken = userFcmToken;
+    }
 }
