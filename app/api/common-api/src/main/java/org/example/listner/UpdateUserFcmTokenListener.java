@@ -3,6 +3,7 @@ package org.example.listner;
 import lombok.RequiredArgsConstructor;
 import org.example.conver.UserMessageConverter;
 import org.example.metric.MessageQueueSubMonitored;
+import org.example.service.UserAlertService;
 import org.example.service.UserSubscriptionService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.connection.Message;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 public class UpdateUserFcmTokenListener implements MessageListener {
 
     private final UserSubscriptionService userSubscriptionServiceImpl;
+    private final UserAlertService userAlertServiceImpl;
 
     @Override
     @MessageQueueSubMonitored(topic = "updateUserFcmToken")
@@ -22,5 +24,6 @@ public class UpdateUserFcmTokenListener implements MessageListener {
         var request = UserMessageConverter.toUserFcmMessage(message);
 
         userSubscriptionServiceImpl.updateUserFcmToken(request);
+        userAlertServiceImpl.updateUserFcmToken(request);
     }
 }
