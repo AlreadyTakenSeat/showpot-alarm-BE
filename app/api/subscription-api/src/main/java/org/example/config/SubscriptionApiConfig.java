@@ -31,37 +31,37 @@ public class SubscriptionApiConfig {
 
 
     @Bean
-    MessageListenerAdapter registerShowMessageListenerAdapter() {
+    public MessageListenerAdapter registerShowMessageListenerAdapter() {
         return new MessageListenerAdapter(registerShowMessageListener);
     }
 
     @Bean
-    MessageListenerAdapter updateShowMessageListenerAdapter() {
+    public MessageListenerAdapter updateShowMessageListenerAdapter() {
         return new MessageListenerAdapter(updateShowMessageListener);
     }
 
     @Bean
-    MessageListenerAdapter subscriptionArtistMessageListerAdapter() {
+    public MessageListenerAdapter subscriptionArtistMessageListerAdapter() {
         return new MessageListenerAdapter(subscriptionArtistMessageListener);
     }
 
     @Bean
-    MessageListenerAdapter unsubscriptionArtistMessageListerAdapter() {
+    public MessageListenerAdapter unsubscriptionArtistMessageListerAdapter() {
         return new MessageListenerAdapter(unsubscriptionArtistMessageListener);
     }
 
     @Bean
-    MessageListenerAdapter subscriptionGenreMessageListerAdapter() {
+    public MessageListenerAdapter subscriptionGenreMessageListerAdapter() {
         return new MessageListenerAdapter(subscriptionGenreMessageListener);
     }
 
     @Bean
-    MessageListenerAdapter unsubscriptionGenreMessageListerAdapter() {
+    public MessageListenerAdapter unsubscriptionGenreMessageListerAdapter() {
         return new MessageListenerAdapter(unsubscriptionGenreMessageListener);
     }
 
     @Bean
-    RedisMessageListenerContainer registerShowMessageListenerContainer(
+    public RedisMessageListenerContainer registerShowMessageListenerContainer(
         RedisConnectionFactory connectionFactory,
         MessageListenerAdapter registerShowMessageListenerAdapter
     ) {
@@ -75,7 +75,7 @@ public class SubscriptionApiConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer updateShowMessageListenerContainer(
+    public RedisMessageListenerContainer updateShowMessageListenerContainer(
         RedisConnectionFactory connectionFactory,
         MessageListenerAdapter updateShowMessageListenerAdapter
     ) {
@@ -89,7 +89,7 @@ public class SubscriptionApiConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer subscriptionArtistMessageListerContainer(
+    public RedisMessageListenerContainer subscriptionArtistMessageListerContainer(
         RedisConnectionFactory connectionFactory,
         MessageListenerAdapter subscriptionArtistMessageListerAdapter
     ) {
@@ -103,7 +103,7 @@ public class SubscriptionApiConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer unsubscriptionArtistMessageListerContainer(
+    public RedisMessageListenerContainer unsubscriptionArtistMessageListerContainer(
         RedisConnectionFactory connectionFactory,
         MessageListenerAdapter unsubscriptionArtistMessageListerAdapter
     ) {
@@ -117,7 +117,7 @@ public class SubscriptionApiConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer subscriptionGenreMessageListerContainer(
+    public RedisMessageListenerContainer subscriptionGenreMessageListerContainer(
         RedisConnectionFactory connectionFactory,
         MessageListenerAdapter subscriptionGenreMessageListerAdapter
     ) {
@@ -131,7 +131,7 @@ public class SubscriptionApiConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer unsubscriptionGenreMessageListerContainer(
+    public RedisMessageListenerContainer unsubscriptionGenreMessageListerContainer(
         RedisConnectionFactory connectionFactory,
         MessageListenerAdapter unsubscriptionGenreMessageListerAdapter
     ) {

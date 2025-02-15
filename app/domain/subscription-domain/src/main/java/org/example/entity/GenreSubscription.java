@@ -38,4 +38,8 @@ public class GenreSubscription extends BaseEntity {
     public void unsubscribe() {
         this.softDelete();
     }
+
+    public void updateUserFcmToken(String fcmToken) {
+        this.userFcmToken = fcmToken;
+    }
 }
